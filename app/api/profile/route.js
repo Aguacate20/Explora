@@ -1,11 +1,6 @@
 // app/api/profile/route.js
 // Extrae el perfil vocacional del estudiante a partir del historial de chat.
-
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Usa Groq (GRATIS) — llama-3.1-8b-instant es rápido y suficiente para extracción de JSON.
 
 const PROFILE_SYSTEM = `Eres un extractor de información especializado en orientación vocacional.
 Dado un historial de conversación, extrae un perfil JSON del estudiante.
@@ -32,26 +27,35 @@ export async function POST(request) {
   try {
     const { messages, currentProfile } = await request.json();
 
-    // Solo los últimos 12 mensajes para no gastar tokens
     const recentMessages = messages.slice(-12);
 
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 600,
-      system: PROFILE_SYSTEM,
-      messages: [
-        {
-          role: "user",
-          content: `Historial de conversación:\n${recentMessages
-            .map((m) => `${m.role === "user" ? "Estudiante" : "Orientador"}: ${m.content}`)
-            .join("\n")}\n\nPerfil previo conocido: ${JSON.stringify(currentProfile || {})}`,
-        },
-      ],
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",  // Modelo más ligero para tareas de extracción
+        max_tokens: 600,
+        messages: [
+          { role: "system", content: PROFILE_SYSTEM },
+          {
+            role: "user",
+            content: `Historial:\n${recentMessages
+              .map((m) => `${m.role === "user" ? "Estudiante" : "Orientador"}: ${m.content}`)
+              .join("\n")}\n\nPerfil previo: ${JSON.stringify(currentProfile || {})}`,
+          },
+        ],
+      }),
     });
 
-    const text = response.content
-      .map((b) => (b.type === "text" ? b.text : ""))
-      .join("")
+    if (!response.ok) {
+      return Response.json({ error: "No se pudo actualizar el perfil" }, { status: 500 });
+    }
+
+    const data = await response.json();
+    const text = (data.choices?.[0]?.message?.content || "{}")
       .replace(/```json|```/g, "")
       .trim();
 
