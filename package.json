@@ -1,7 +1,7 @@
 {
   "name": "explora-tu-carrera",
   "version": "1.0.0",
-  "description": "Sistema de orientación vocacional - Universidad de La Sabana",
+  "description": "Sistema de orientacion vocacional - Universidad de La Sabana",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +11,7 @@
   "dependencies": {
     "next": "^14.2.0",
     "react": "^18.3.0",
-    "react-dom": "^18.3.0",
+    "react-dom": "^18.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
