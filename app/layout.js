@@ -1,4 +1,3 @@
-// app/layout.js
 export const metadata = {
   title: "Explora Tu Carrera | Universidad de La Sabana",
   description: "Sistema de orientación vocacional de la Universidad de La Sabana",
@@ -13,9 +12,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body style={{ margin: 0, background: "#0a1a0f" }}>
-        {children}
-      </body>
+      <body style={{ margin: 0, background: "#0a1a0f" }}>{children}</body>
     </html>
   );
 }
