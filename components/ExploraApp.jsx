@@ -301,10 +301,13 @@ export default function ExploraApp() {
 </body>
 </html>`;
 
-    const win = window.open("", "_blank");
-    win.document.write(html);
-    win.document.close();
-    setTimeout(() => win.print(), 500);
+    const blob = new Blob([html], { type: "text/html" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `Reporte_${student.nickname}_${student.id}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   // ─────────────── RENDERS ───────────────────────────────────────────────────
