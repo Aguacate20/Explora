@@ -1,6 +1,6 @@
 # Carreras y Programas — Universidad de La Sabana
-# Edita este archivo directamente en GitHub para actualizar la información del orientador.
-# Formato: texto libre organizado por programa. Separa cada programa con ---
+# Editar este archivo directamente en GitHub para actualizar la información del orientador.
+# Formato: texto libre organizado por programa. Separar cada programa con ---
 
 ## Administración de Empresas
 Facultad: Ciencias Económicas y Administrativas
