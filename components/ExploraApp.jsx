@@ -40,6 +40,7 @@ export default function ExploraApp() {
   const [careersContent, setCareersContent] = useState("");
   const [careersStatus, setCareersStatus]   = useState("");
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const chatEndRef  = useRef(null);
   const textareaRef = useRef(null);
 
@@ -538,7 +539,8 @@ export default function ExploraApp() {
   return (
     <div style={S.chatWrap}>
       <GS />
-      <div style={S.sidebar}>
+      <div onClick={() => setSidebarOpen(false)} className={`sidebar-overlay${sidebarOpen?" open":""}`}/>
+      <div className={`sidebar-mobile${sidebarOpen?" open":""}`} style={S.sidebar}>
         <div style={S.sidebarTop}>
           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
             <span style={{fontSize:16,color:"#52B788"}}>◈</span>
@@ -577,11 +579,14 @@ export default function ExploraApp() {
 
       <div style={S.chatArea}>
         <div style={S.chatHeader}>
-          <div>
-            <div style={{fontSize:16,fontWeight:500,color:"#D8F3DC"}}>Sesión {currentSession}: {SESSIONS_CONFIG[currentSession-1]?.title}</div>
-            <div style={{fontSize:12,color:"#52B78877",marginTop:2}}>{SESSIONS_CONFIG[currentSession-1]?.subtitle}</div>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <button className="menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)} style={{background:"none",border:"1px solid #2D6A4F44",borderRadius:8,color:"#52B788",fontSize:18,cursor:"pointer",padding:"4px 10px",lineHeight:1,alignItems:"center",justifyContent:"center",flexShrink:0}}>☰</button>
+            <div>
+              <div style={{fontSize:16,fontWeight:500,color:"#D8F3DC"}}>Sesión {currentSession}: {SESSIONS_CONFIG[currentSession-1]?.title}</div>
+              <div style={{fontSize:12,color:"#52B78877",marginTop:2}}>{SESSIONS_CONFIG[currentSession-1]?.subtitle}</div>
+            </div>
           </div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"flex-end",maxWidth:380}}>
+          <div className="hide-mobile" style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"flex-end",maxWidth:380}}>
             {SESSIONS_CONFIG[currentSession-1]?.activities.map((a,i) => <div key={i} style={S.activityPill}>{a}</div>)}
           </div>
         </div>
@@ -637,6 +642,15 @@ function GS() {
     .primary-btn:hover:not(:disabled){background:#1B4332!important}.primary-btn:disabled{opacity:.5;cursor:not-allowed}
     .send-btn:hover:not(:disabled){background:#1B4332!important}
     .ss:hover{background:rgba(82,183,136,.08)!important}
+    @media(max-width:640px){
+      .sidebar-mobile{position:fixed!important;left:0!important;top:0!important;bottom:0!important;z-index:100!important;transform:translateX(-100%);transition:transform .3s ease;width:280px!important;min-width:280px!important}
+      .sidebar-mobile.open{transform:translateX(0)!important}
+      .sidebar-overlay{display:none;position:fixed;inset:0;background:#00000088;z-index:99}
+      .sidebar-overlay.open{display:block}
+      .menu-btn{display:flex!important}
+      .hide-mobile{display:none!important}
+    }
+    @media(min-width:641px){.menu-btn{display:none!important}}
     .tab-btn{padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:#52B78877;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;transition:all .2s}
     .tab-btn:hover{color:#74C69D}
     .outline-btn:hover{background:#0d2218!important}
