@@ -41,6 +41,8 @@ export async function POST(request) {
     });
 
     if (!groqRes.ok) {
+      const errBody = await groqRes.json().catch(() => ({}));
+      console.error("Gemini error:", groqRes.status, JSON.stringify(errBody));
       if (groqRes.status === 429) {
         // Retry automático hasta 3 veces con espera progresiva
         for (let i = 1; i <= 3; i++) {
