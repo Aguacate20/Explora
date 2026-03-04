@@ -25,14 +25,14 @@ export async function POST(request) {
 
     const recentMessages = messages.slice(-12);
 
-    const groqRes = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
+    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.GEMINI_API_KEY}`,
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gemini-2.5-flash-lite",
+        model: "meta-llama/llama-4-maverick-17b-128e-instruct",
         max_tokens: 600,
         messages: [
           { role: "system", content: PROFILE_SYSTEM },
