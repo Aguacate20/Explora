@@ -67,7 +67,8 @@ export async function POST(request) {
             const content = retryData.choices?.[0]?.message?.content || "";
             if (studentId) {
               const lastUserMsg = messages[messages.length - 1];
-              await supabase.from("messages").insert([
+              console.log("Saving to Supabase, studentId:", studentId);
+              const { error: dbError } = await supabase.from("messages").insert([
                 { student_id: studentId, role: "user", content: lastUserMsg.content, session_number: sessionNumber || 1 },
                 { student_id: studentId, role: "assistant", content, session_number: sessionNumber || 1 },
               ]);
