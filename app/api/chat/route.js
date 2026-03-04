@@ -72,6 +72,7 @@ export async function POST(request) {
                 { student_id: studentId, role: "user", content: lastUserMsg.content, session_number: sessionNumber || 1 },
                 { student_id: studentId, role: "assistant", content, session_number: sessionNumber || 1 },
               ]);
+              if (dbError) console.error("Supabase error:", JSON.stringify(dbError));
             }
             return Response.json({ content });
           }
